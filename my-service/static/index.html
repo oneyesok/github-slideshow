@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todo UI</title>
+  <style>
+    body{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 16px}
+    h1{margin:0 0 16px}
+    form{display:flex;gap:8px;margin-bottom:16px}
+    input[type=text]{flex:1;padding:8px}
+    button{padding:8px 12px}
+    ul{list-style:none;padding:0}
+    li{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eee}
+    .done{text-decoration:line-through;color:#888}
+  </style>
+</head>
+<body>
+  <h1>待办清单</h1>
+  <form id="form">
+    <input id="title" type="text" placeholder="输入待办事项..." required />
+    <button type="submit">添加</button>
+  </form>
+  <ul id="list"></ul>
+
+  <script>
+    const api = {
+      list: async () => fetch('/api/todos').then(r=>r.json()),
+      create: async (title) => fetch('/api/todos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title})}).then(r=>r.json()),
+      toggle: async (id, done) => fetch(`/api/todos/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({done})}).then(r=>r.json()),
+      remove: async (id) => fetch(`/api/todos/${id}`,{method:'DELETE'})
+    };
+
+    const listEl = document.getElementById('list');
+    const formEl = document.getElementById('form');
+    const titleEl = document.getElementById('title');
+
+    async function refresh(){
+      const items = await api.list();
+      listEl.innerHTML = '';
+      for(const t of items){
+        const li = document.createElement('li');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = t.done;
+        cb.onchange = async () => { await api.toggle(t.id, cb.checked); await refresh(); };
+        const span = document.createElement('span');
+        span.textContent = t.title;
+        span.className = t.done ? 'done' : '';
+        const del = document.createElement('button');
+        del.textContent = '删除';
+        del.onclick = async () => { await api.remove(t.id); await refresh(); };
+        li.append(cb, span, del);
+        listEl.appendChild(li);
+      }
+    }
+
+    formEl.onsubmit = async (e)=>{
+      e.preventDefault();
+      const title = titleEl.value.trim();
+      if(!title) return;
+      await api.create(title);
+      titleEl.value='';
+      await refresh();
+    }
+
+    refresh();
+  </script>
+</body>
+</html>
