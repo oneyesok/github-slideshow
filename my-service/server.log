@@ -1,0 +1,26 @@
+INFO:     Will watch for changes in these directories: ['/workspace/my-service']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [6349] using WatchFiles
+INFO:     Started server process [6351]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:60684 - "GET /healthz HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6351]
+INFO:     Started server process [6468]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6468]
+INFO:     Started server process [7299]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53040 - "GET /api/todos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53048 - "POST /api/todos HTTP/1.1" 201 Created
+INFO:     127.0.0.1:53062 - "GET /api/todos HTTP/1.1" 200 OK
